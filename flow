@@ -1,1 +1,37 @@
-[{"id":"8c4cb017.081818","type":"mqtt out","z":"6dbcab7f.8e7c54","name":"","topic":"/gti780a2019/stationmeteo03/temperature","qos":"2","retain":"true","broker":"6d1f145f.230464","x":610,"y":400,"wires":[]},{"id":"6d1f145f.230464","type":"mqtt-broker","z":"","name":"broker","broker":"broker.hivemq.com","port":"1883","clientid":"","usetls":false,"compatmode":true,"keepalive":"60","cleansession":true,"birthTopic":"","birthQos":"0","birthPayload":"","closeTopic":"","closeQos":"0","closePayload":"","willTopic":"","willQos":"0","willPayload":""}]
+[
+  {
+    "id": "8c4cb017.081818",
+    "type": "mqtt out",
+    "z": "6dbcab7f.8e7c54",
+    "name": "",
+    "topic": "/gti780a2019/stationmeteo03/temperature",
+    "qos": "2",
+    "retain": "true",
+    "broker": "6d1f145f.230464",
+    "x": 610,
+    "y": 400,
+    "wires": []
+  },
+  {
+    "id": "6d1f145f.230464",
+    "type": "mqtt-broker",
+    "z": "",
+    "name": "broker",
+    "broker": "broker.hivemq.com",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "compatmode": true,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  }
+]
