@@ -1,0 +1,726 @@
+[
+  {
+    "id": "d3708536.b79df",
+    "type": "tab",
+    "label": "Station météo",
+    "disabled": false,
+    "info": ""
+  },
+  {
+    "id": "9a6dfc0d.ef2ae8",
+    "type": "http request",
+    "z": "d3708536.b79df",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": false,
+    "url": "https://meteo.gc.ca/rss/city/qc-147_f.xml",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "authType": "",
+    "x": 530,
+    "y": 720,
+    "wires": [
+      [
+        "868fb569.4a9cb"
+      ]
+    ]
+  },
+  {
+    "id": "18d4e3f3.2cdbd4",
+    "type": "inject",
+    "z": "d3708536.b79df",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "5",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "x": 330,
+    "y": 720,
+    "wires": [
+      [
+        "9a6dfc0d.ef2ae8"
+      ]
+    ]
+  },
+  {
+    "id": "868fb569.4a9cb",
+    "type": "xml",
+    "z": "d3708536.b79df",
+    "name": "",
+    "property": "payload",
+    "attr": "",
+    "chr": "",
+    "x": 710,
+    "y": 720,
+    "wires": [
+      [
+        "86cb8b84.8a974"
+      ]
+    ]
+  },
+  {
+    "id": "86cb8b84.8a974",
+    "type": "function",
+    "z": "d3708536.b79df",
+    "name": "extractTemperature",
+    "func": "const temperatureTitle = msg.payload[\"feed\"][\"entry\"][1]['title'][0];\nconst temperature = temperatureTitle.match(/\\d+.\\d*/);\nglobal.set('mtlTmp', temperature);\nreturn {\n    payload: global.get('mtlTmp')\n};",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 910,
+    "y": 720,
+    "wires": [
+      [
+        "57b0845d.57dad4"
+      ]
+    ]
+  },
+  {
+    "id": "57b0845d.57dad4",
+    "type": "debug",
+    "z": "d3708536.b79df",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "x": 1130,
+    "y": 720,
+    "wires": []
+  },
+  {
+    "id": "95ccaabb.4a2908",
+    "type": "http in",
+    "z": "d3708536.b79df",
+    "name": "",
+    "url": "server/interieur",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 360,
+    "y": 1160,
+    "wires": [
+      [
+        "feb1e123.a961d8"
+      ]
+    ]
+  },
+  {
+    "id": "f1e84ea3.f5c68",
+    "type": "http response",
+    "z": "d3708536.b79df",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 750,
+    "y": 1160,
+    "wires": []
+  },
+  {
+    "id": "feb1e123.a961d8",
+    "type": "template",
+    "z": "d3708536.b79df",
+    "name": "interieur",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "{{global.tmpInt}}",
+    "output": "str",
+    "x": 580,
+    "y": 1160,
+    "wires": [
+      [
+        "f1e84ea3.f5c68"
+      ]
+    ]
+  },
+  {
+    "id": "bffeaba2.c8c7b8",
+    "type": "http in",
+    "z": "d3708536.b79df",
+    "name": "",
+    "url": "/server/classe",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 350,
+    "y": 1220,
+    "wires": [
+      [
+        "447461b7.cae918"
+      ]
+    ]
+  },
+  {
+    "id": "33b09cd6.d2b5c4",
+    "type": "http response",
+    "z": "d3708536.b79df",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 750,
+    "y": 1220,
+    "wires": []
+  },
+  {
+    "id": "447461b7.cae918",
+    "type": "template",
+    "z": "d3708536.b79df",
+    "name": "classe",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "{{global.mtlTmp}};{{global.clsNb}}",
+    "output": "str",
+    "x": 570,
+    "y": 1220,
+    "wires": [
+      [
+        "33b09cd6.d2b5c4"
+      ]
+    ]
+  },
+  {
+    "id": "1a68a8c8.c1e65f",
+    "type": "http in",
+    "z": "d3708536.b79df",
+    "name": "",
+    "url": "server/exterieure",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 360,
+    "y": 1280,
+    "wires": [
+      [
+        "bb24dd57.a7131"
+      ]
+    ]
+  },
+  {
+    "id": "b1a8c837.e6f9",
+    "type": "http response",
+    "z": "d3708536.b79df",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 750,
+    "y": 1280,
+    "wires": []
+  },
+  {
+    "id": "bb24dd57.a7131",
+    "type": "template",
+    "z": "d3708536.b79df",
+    "name": "exterieure",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "{{global.mtlTmp}}",
+    "output": "str",
+    "x": 580,
+    "y": 1280,
+    "wires": [
+      [
+        "b1a8c837.e6f9"
+      ]
+    ]
+  },
+  {
+    "id": "e51b0114.e3a14",
+    "type": "http in",
+    "z": "d3708536.b79df",
+    "name": "",
+    "url": "server/",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 330,
+    "y": 1340,
+    "wires": [
+      [
+        "9c7b0509.c870c"
+      ]
+    ]
+  },
+  {
+    "id": "73e41b70.070744",
+    "type": "http response",
+    "z": "d3708536.b79df",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 750,
+    "y": 1340,
+    "wires": []
+  },
+  {
+    "id": "9c7b0509.c870c",
+    "type": "template",
+    "z": "d3708536.b79df",
+    "name": "/",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "Station métérologique tout en un:</br>\nTempérature intérieure: {{global.intTmp}} C</br>\nTempérature moyenne de la classe: {{global.clsTmp}} C \n({{global.clsNb}} capteurs disponibles)</br>\nTempérature extérieure: {{global.mtlTmp}} C</br>",
+    "output": "str",
+    "x": 570,
+    "y": 1340,
+    "wires": [
+      [
+        "73e41b70.070744"
+      ]
+    ]
+  },
+  {
+    "id": "f061bf6b.e4b278",
+    "type": "comment",
+    "z": "d3708536.b79df",
+    "name": "1.5 -- Mini-service Web",
+    "info": "",
+    "x": 340,
+    "y": 1100,
+    "wires": []
+  },
+  {
+    "id": "ccc69d75.c5c32",
+    "type": "exec",
+    "z": "d3708536.b79df",
+    "command": "python /home/pi/GTI780_Lab_03/lcd.py",
+    "addpay": true,
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "oldrc": false,
+    "name": "",
+    "x": 820,
+    "y": 940,
+    "wires": [
+      [
+        "86b9d64e.aa3d"
+      ],
+      [
+        "398496e1.d56e02"
+      ],
+      [
+        "594c5aa1.6c70fc"
+      ]
+    ]
+  },
+  {
+    "id": "86b9d64e.aa3d",
+    "type": "debug",
+    "z": "d3708536.b79df",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "x": 1110,
+    "y": 900,
+    "wires": []
+  },
+  {
+    "id": "fbe1ff83.00d718",
+    "type": "inject",
+    "z": "d3708536.b79df",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "15",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "x": 330,
+    "y": 900,
+    "wires": [
+      [
+        "183a9c4.c36d9e4"
+      ]
+    ]
+  },
+  {
+    "id": "398496e1.d56e02",
+    "type": "debug",
+    "z": "d3708536.b79df",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "x": 1110,
+    "y": 940,
+    "wires": []
+  },
+  {
+    "id": "183a9c4.c36d9e4",
+    "type": "function",
+    "z": "d3708536.b79df",
+    "name": "extract",
+    "func": "\nreturn {\n    payload: \"[i] \" + global.get('intTmp')\n};",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 510,
+    "y": 900,
+    "wires": [
+      [
+        "ccc69d75.c5c32"
+      ]
+    ]
+  },
+  {
+    "id": "594c5aa1.6c70fc",
+    "type": "debug",
+    "z": "d3708536.b79df",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "x": 1110,
+    "y": 980,
+    "wires": []
+  },
+  {
+    "id": "73f7c25d.32219c",
+    "type": "comment",
+    "z": "d3708536.b79df",
+    "name": "1.4 -- Affichage sur le LCD du Rpi",
+    "info": "",
+    "x": 360,
+    "y": 840,
+    "wires": []
+  },
+  {
+    "id": "6b4a73e0.099984",
+    "type": "comment",
+    "z": "d3708536.b79df",
+    "name": "1.3 -- Réception données Environnement Canada",
+    "info": "",
+    "x": 410,
+    "y": 660,
+    "wires": []
+  },
+  {
+    "id": "244240bd.7bd4a8",
+    "type": "inject",
+    "z": "d3708536.b79df",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "15",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "5",
+    "x": 330,
+    "y": 940,
+    "wires": [
+      [
+        "215cb718.87d068"
+      ]
+    ]
+  },
+  {
+    "id": "215cb718.87d068",
+    "type": "function",
+    "z": "d3708536.b79df",
+    "name": "extract",
+    "func": "\nreturn {\n    payload: \"[m] \" + global.get('clsTmp') + \n        \" [\" + global.get('clsNb') + \"]\"\n};",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 510,
+    "y": 940,
+    "wires": [
+      [
+        "ccc69d75.c5c32"
+      ]
+    ]
+  },
+  {
+    "id": "da9dc8f0.4c0938",
+    "type": "inject",
+    "z": "d3708536.b79df",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "15",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "10",
+    "x": 330,
+    "y": 980,
+    "wires": [
+      [
+        "632d1006.1178e"
+      ]
+    ]
+  },
+  {
+    "id": "632d1006.1178e",
+    "type": "function",
+    "z": "d3708536.b79df",
+    "name": "extract",
+    "func": "\nreturn {\n    payload: \"[e] \" + global.get('mtlTmp')\n};",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 510,
+    "y": 980,
+    "wires": [
+      [
+        "ccc69d75.c5c32"
+      ]
+    ]
+  },
+  {
+    "id": "5da615aa.ee6bac",
+    "type": "rpi-ds18b20",
+    "z": "d3708536.b79df",
+    "topic": "",
+    "array": false,
+    "name": "",
+    "x": 550,
+    "y": 180,
+    "wires": [
+      [
+        "f5b48932.a485a8",
+        "562296eb.1cfb1"
+      ]
+    ]
+  },
+  {
+    "id": "58281b8d.a1a21c",
+    "type": "inject",
+    "z": "d3708536.b79df",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "1",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "x": 340,
+    "y": 180,
+    "wires": [
+      [
+        "5da615aa.ee6bac"
+      ]
+    ]
+  },
+  {
+    "id": "f5b48932.a485a8",
+    "type": "debug",
+    "z": "d3708536.b79df",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "x": 770,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "562296eb.1cfb1",
+    "type": "mqtt out",
+    "z": "d3708536.b79df",
+    "name": "",
+    "topic": "/gti780a2019/stationmeteo03/temperature",
+    "qos": "2",
+    "retain": "true",
+    "broker": "6d1f145f.230464",
+    "x": 870,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "e7dc19cf.05ac8",
+    "type": "mqtt in",
+    "z": "d3708536.b79df",
+    "name": "",
+    "topic": "/gti780a2019/+/temperature",
+    "qos": "1",
+    "datatype": "auto",
+    "broker": "731f9378.0f00fc",
+    "x": 380,
+    "y": 500,
+    "wires": [
+      [
+        "bdd5148c.07a4e",
+        "a6de8170.4d1da"
+      ]
+    ]
+  },
+  {
+    "id": "8df9d511.4fe69",
+    "type": "function",
+    "z": "d3708536.b79df",
+    "name": "",
+    "func": "if (msg != null){\n    var currentdate = new Date(Date.now() - 10000);\n    data = msg.payload;\n    var sum = 0;\n    var count = 0;\n    for (var i = data.length - 1; (i > 0) && (data[i].time > currentdate); i--){\n        sum += data[i].value;\n        count += 1;\n    }\n    var mean = parseFloat(sum) / parseFloat(count);\n    node.warn('Moyenne : ' + mean + ', Nombre de données : ' + count);\n    global.set('clsTmp', mean);\n    global.set('clsNb', count);\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 790,
+    "y": 460,
+    "wires": [
+      []
+    ],
+    "inputLabels": [
+      "table"
+    ]
+  },
+  {
+    "id": "bdd5148c.07a4e",
+    "type": "function",
+    "z": "d3708536.b79df",
+    "name": "",
+    "func": "var input = msg.payload;\nvar currentdate = new Date();\nvar time = currentdate;\n//{'hours': currentdate.getHours(), 'minutes': currentdate.getMinutes(), 'seconds': currentdate.getSeconds(), 'milliseconds': currentdate.getMilliseconds()};\nvar table = flow.get('values');\nif (table == null){\n    table = [];\n}\nvar newMsg = null;\nif(!isNaN(input) && input !== \"\"){\n    var new_element = {'time': time, 'value': parseFloat(input)};\n    table.push(new_element);\n    flow.set('values', table);\n    newMsg = { payload: table};\n}\nreturn newMsg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 630,
+    "y": 460,
+    "wires": [
+      [
+        "8df9d511.4fe69"
+      ]
+    ],
+    "outputLabels": [
+      "table"
+    ]
+  },
+  {
+    "id": "a6de8170.4d1da",
+    "type": "debug",
+    "z": "d3708536.b79df",
+    "name": "",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "x": 650,
+    "y": 540,
+    "wires": []
+  },
+  {
+    "id": "3e9423d0.8e5454",
+    "type": "mqtt in",
+    "z": "d3708536.b79df",
+    "name": "",
+    "topic": "/gti780a2019/stationmeteo03/temperature",
+    "qos": "1",
+    "datatype": "auto",
+    "broker": "731f9378.0f00fc",
+    "x": 440,
+    "y": 280,
+    "wires": [
+      [
+        "970f027c.6f4ce"
+      ]
+    ]
+  },
+  {
+    "id": "970f027c.6f4ce",
+    "type": "change",
+    "z": "d3708536.b79df",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "intTmp",
+        "pt": "global",
+        "to": "payload",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 790,
+    "y": 280,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "a7792afd.d6ea7",
+    "type": "comment",
+    "z": "d3708536.b79df",
+    "name": "1.2 - Température de la classe",
+    "info": "",
+    "x": 350,
+    "y": 400,
+    "wires": []
+  },
+  {
+    "id": "98a9d795.4d02a",
+    "type": "comment",
+    "z": "d3708536.b79df",
+    "name": "1.1 Température de la Raspberry",
+    "info": "",
+    "x": 350,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "6d1f145f.230464",
+    "type": "mqtt-broker",
+    "z": "",
+    "name": "broker",
+    "broker": "broker.hivemq.com",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "compatmode": true,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  },
+  {
+    "id": "731f9378.0f00fc",
+    "type": "mqtt-broker",
+    "z": "",
+    "name": "gti780",
+    "broker": "broker.hivemq.com",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "compatmode": true,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  }
+]
